@@ -266,6 +266,17 @@ export function InteractiveMenu() {
           <p className="text-xs text-muted-foreground mt-1">
             Pizzería Popular © 2026
           </p>
+          <p className="text-xs text-muted-foreground mt-1">
+            Created by{' '}
+            <a 
+              href="https://ecordi.com.ar" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
+              Eugenio Cordi
+            </a>
+          </p>
         </div>
       </footer>
 
