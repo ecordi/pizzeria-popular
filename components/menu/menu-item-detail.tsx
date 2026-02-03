@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ChevronLeft, Check } from "lucide-react"
+import { ChevronLeft, Check, ShoppingCart } from "lucide-react"
 import type { MenuItem } from "@/lib/menu-data"
 import { formatPrice } from "@/lib/menu-data"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { useCart } from "@/contexts/cart-context"
 
 interface MenuItemDetailProps {
   item: MenuItem
@@ -17,6 +18,29 @@ export function MenuItemDetail({ item, onBack }: MenuItemDetailProps) {
   const [selectedVariant, setSelectedVariant] = useState(
     item.variants ? item.variants[0] : null
   )
+  const [isAdding, setIsAdding] = useState(false)
+  const { addItem } = useCart()
+
+  const handleAddToCart = () => {
+    setIsAdding(true)
+    try {
+      // Convert selectedVariant to match MenuVariant interface
+      const variant = selectedVariant ? {
+        id: `${item.id}-${selectedVariant.name}`,
+        name: selectedVariant.name,
+        price: selectedVariant.price
+      } : undefined
+      
+      addItem(item, variant)
+      // Show success feedback briefly
+      setTimeout(() => {
+        setIsAdding(false)
+      }, 1000)
+    } catch (error) {
+      console.warn("Error adding to cart:", error)
+      setIsAdding(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -46,9 +70,13 @@ export function MenuItemDetail({ item, onBack }: MenuItemDetailProps) {
           onClick={(e) => {
             e.preventDefault()
             e.stopPropagation()
-            onBack()
+            try {
+              onBack()
+            } catch (error) {
+              console.warn("Back navigation error:", error)
+            }
           }}
-          className="absolute top-4 left-4 rounded-full shadow-lg bg-card/90 backdrop-blur-sm"
+          className="absolute top-4 left-4 rounded-full shadow-lg bg-card/90 backdrop-blur-sm hover:bg-card/95 transition-colors"
           aria-label="Volver atrás"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -135,6 +163,25 @@ export function MenuItemDetail({ item, onBack }: MenuItemDetailProps) {
               </span>
             </div>
           )}
+
+          {/* Add to Cart Button */}
+          <Button
+            onClick={handleAddToCart}
+            disabled={isAdding}
+            className="w-full mt-6 h-12 text-lg font-semibold bg-primary hover:bg-primary/90"
+          >
+            {isAdding ? (
+              <>
+                <Check className="h-5 w-5 mr-2" />
+                ¡Agregado!
+              </>
+            ) : (
+              <>
+                <ShoppingCart className="h-5 w-5 mr-2" />
+                Agregar al Carrito
+              </>
+            )}
+          </Button>
         </div>
       </div>
     </div>

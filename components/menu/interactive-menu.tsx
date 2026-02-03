@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import Image from "next/image"
 import { menuData, type MenuSection, type MenuCategory, type MenuItem } from "@/lib/menu-data"
 import { MenuHeader } from "./menu-header"
@@ -9,6 +9,8 @@ import { MenuCategoryCard } from "./menu-category-card"
 import { MenuItemCard } from "./menu-item-card"
 import { MenuItemDetail } from "./menu-item-detail"
 import { PromoBanner } from "./promo-banner"
+import { CartButton } from "@/components/cart/cart-button"
+import { CartModal } from "@/components/cart/cart-modal"
 
 type ViewState =
   | { type: "sections" }
@@ -19,36 +21,99 @@ type ViewState =
 export function InteractiveMenu() {
   const [viewState, setViewState] = useState<ViewState>({ type: "sections" })
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isCartOpen, setIsCartOpen] = useState(false)
 
-  const navigateTo = useCallback((newState: ViewState) => {
-    setIsAnimating(true)
-    setTimeout(() => {
-      setViewState(newState)
-      setIsAnimating(false)
-    }, 150)
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = (event: PopStateEvent) => {
+      if (event.state && event.state.viewState) {
+        setViewState(event.state.viewState)
+      } else {
+        // If no state, go to sections
+        setViewState({ type: "sections" })
+      }
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    
+    // Push initial state
+    if (typeof window !== 'undefined') {
+      window.history.replaceState({ viewState: { type: "sections" } }, '', window.location.href)
+    }
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState)
+    }
   }, [])
 
-  const handleBack = useCallback(() => {
+  const navigateTo = useCallback((newState: ViewState) => {
+    // Prevent navigation during animation
+    if (isAnimating) return
+    
     setIsAnimating(true)
     setTimeout(() => {
-      switch (viewState.type) {
-        case "categories":
-          setViewState({ type: "sections" })
-          break
-        case "items":
-          setViewState({ type: "categories", section: viewState.section })
-          break
-        case "detail":
-          setViewState({
-            type: "items",
-            section: viewState.section,
-            category: viewState.category,
-          })
-          break
+      try {
+        setViewState(newState)
+        // Push state to browser history
+        if (typeof window !== 'undefined') {
+          window.history.pushState({ viewState: newState }, '', window.location.href)
+        }
+      } catch (error) {
+        console.warn("Navigation error:", error)
+        setViewState({ type: "sections" })
+      } finally {
+        setIsAnimating(false)
       }
-      setIsAnimating(false)
     }, 150)
-  }, [viewState])
+  }, [isAnimating])
+
+  const handleBack = useCallback(() => {
+    // Prevent multiple clicks during animation
+    if (isAnimating) return
+    
+    setIsAnimating(true)
+    setTimeout(() => {
+      try {
+        switch (viewState.type) {
+          case "categories":
+            setViewState({ type: "sections" })
+            break
+          case "items":
+            // Validate that section exists before navigating
+            if (viewState.section) {
+              setViewState({ type: "categories", section: viewState.section })
+            } else {
+              setViewState({ type: "sections" })
+            }
+            break
+          case "detail":
+            // Validate that section and category exist before navigating
+            if (viewState.section && viewState.category) {
+              setViewState({
+                type: "items",
+                section: viewState.section,
+                category: viewState.category,
+              })
+            } else if (viewState.section) {
+              setViewState({ type: "categories", section: viewState.section })
+            } else {
+              setViewState({ type: "sections" })
+            }
+            break
+          default:
+            // Fallback to sections view for any unexpected state
+            setViewState({ type: "sections" })
+            break
+        }
+      } catch (error) {
+        // Error recovery: go back to sections view
+        console.warn("Navigation error, returning to sections:", error)
+        setViewState({ type: "sections" })
+      } finally {
+        setIsAnimating(false)
+      }
+    }, 150)
+  }, [viewState, isAnimating])
 
   const getTitle = () => {
     switch (viewState.type) {
@@ -81,6 +146,12 @@ export function InteractiveMenu() {
         className={`transition-opacity duration-150 ${isAnimating ? "opacity-0" : "opacity-100"}`}
       >
         <MenuItemDetail item={viewState.item} onBack={handleBack} />
+        
+        {/* Cart Button */}
+        <CartButton onClick={() => setIsCartOpen(true)} />
+
+        {/* Cart Modal */}
+        <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
       </div>
     )
   }
@@ -197,6 +268,12 @@ export function InteractiveMenu() {
           </p>
         </div>
       </footer>
+
+      {/* Cart Button */}
+      <CartButton onClick={() => setIsCartOpen(true)} />
+
+      {/* Cart Modal */}
+      <CartModal isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   )
 }

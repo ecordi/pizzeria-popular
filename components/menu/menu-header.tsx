@@ -23,9 +23,13 @@ export function MenuHeader({ title, subtitle, showBack, onBack }: MenuHeaderProp
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                onBack()
+                try {
+                  onBack()
+                } catch (error) {
+                  console.warn("Back navigation error:", error)
+                }
               }}
-              className="shrink-0 -ml-2 hover:bg-secondary"
+              className="shrink-0 -ml-2 hover:bg-secondary transition-colors"
               aria-label="Volver atrás"
             >
               <ChevronLeft className="h-6 w-6" />
