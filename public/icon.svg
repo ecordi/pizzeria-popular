@@ -1,43 +1,52 @@
 <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
     @media (prefers-color-scheme: light) {
-      .background { fill: #D2691E; }
-      .crust { fill: #8B4513; }
-      .cheese { fill: #FFD700; }
-      .pepperoni { fill: #DC143C; }
-      .text { fill: white; }
+      .background { fill: #FF6B35; }
+      .pp-text { fill: white; }
+      .smoke { fill: #E0E0E0; opacity: 0.8; }
     }
     @media (prefers-color-scheme: dark) {
-      .background { fill: #8B4513; }
-      .crust { fill: #654321; }
-      .cheese { fill: #FFA500; }
-      .pepperoni { fill: #B22222; }
-      .text { fill: white; }
+      .background { fill: #D2691E; }
+      .pp-text { fill: white; }
+      .smoke { fill: #F0F0F0; opacity: 0.7; }
     }
   </style>
-  <g clip-path="url(#clip0_pizza)">
+  <g clip-path="url(#clip0_pp)">
     <rect class="background" width="180" height="180" rx="37" />
     
-    <!-- Pizza Base -->
-    <circle cx="90" cy="90" r="65" class="cheese"/>
-    <circle cx="90" cy="90" r="70" class="crust" fill="none" stroke-width="10" stroke="#8B4513"/>
-    
-    <!-- Pepperoni slices -->
-    <circle cx="75" cy="75" r="8" class="pepperoni"/>
-    <circle cx="105" cy="70" r="8" class="pepperoni"/>
-    <circle cx="70" cy="105" r="8" class="pepperoni"/>
-    <circle cx="110" cy="105" r="8" class="pepperoni"/>
-    <circle cx="90" cy="95" r="8" class="pepperoni"/>
-    <circle cx="85" cy="115" r="6" class="pepperoni"/>
-    <circle cx="100" cy="85" r="6" class="pepperoni"/>
-    
-    <!-- Letter P -->
-    <g transform="translate(80, 45)">
-      <path class="text" d="M5 0 L5 40 M5 0 L15 0 Q20 0 20 7 Q20 14 15 14 L5 14" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- Smoke/Steam -->
+    <g class="smoke">
+      <ellipse cx="60" cy="35" rx="8" ry="12" transform="rotate(-15 60 35)"/>
+      <ellipse cx="75" cy="25" rx="6" ry="10" transform="rotate(10 75 25)"/>
+      <ellipse cx="90" cy="30" rx="7" ry="11" transform="rotate(-5 90 30)"/>
+      <ellipse cx="105" cy="25" rx="6" ry="10" transform="rotate(15 105 25)"/>
+      <ellipse cx="120" cy="35" rx="8" ry="12" transform="rotate(-10 120 35)"/>
     </g>
+    
+    <!-- Double P Letters -->
+    <g class="pp-text">
+      <!-- First P -->
+      <g transform="translate(45, 70)">
+        <rect x="0" y="0" width="8" height="50" rx="2"/>
+        <rect x="0" y="0" width="25" height="8" rx="4"/>
+        <rect x="0" y="21" width="20" height="8" rx="4"/>
+        <rect x="17" y="8" width="8" height="13" rx="2"/>
+      </g>
+      
+      <!-- Second P -->
+      <g transform="translate(85, 70)">
+        <rect x="0" y="0" width="8" height="50" rx="2"/>
+        <rect x="0" y="0" width="25" height="8" rx="4"/>
+        <rect x="0" y="21" width="20" height="8" rx="4"/>
+        <rect x="17" y="8" width="8" height="13" rx="2"/>
+      </g>
+    </g>
+    
+    <!-- Bottom accent line -->
+    <rect x="30" y="135" width="120" height="4" rx="2" class="pp-text"/>
   </g>
   <defs>
-    <clipPath id="clip0_pizza">
+    <clipPath id="clip0_pp">
       <rect width="180" height="180" fill="white" />
     </clipPath>
   </defs>
