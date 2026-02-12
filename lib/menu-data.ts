@@ -20,6 +20,7 @@ export interface MenuSection {
   id: string
   name: string
   icon: string
+  image?: string
   categories: MenuCategory[]
 }
 
@@ -28,6 +29,7 @@ export const menuData: MenuSection[] = [
     id: "pizzas",
     name: "Pizzas",
     icon: "🍕",
+    image: "https://cucinago.ar/image/cloud/52005.jpg",
     categories: [
       {
         id: "tradicionales",
@@ -253,6 +255,7 @@ export const menuData: MenuSection[] = [
     id: "calzonis",
     name: "Calzonis",
     icon: "🥟",
+    image: "https://cucinago.ar/image/cloud/52004.jpg",
     categories: [
       {
         id: "calzonis-menu",
@@ -281,6 +284,7 @@ export const menuData: MenuSection[] = [
     id: "entradas",
     name: "Entradas",
     icon: "🥗",
+    image: "https://cucinago.ar/image/cloud/52002.jpg",
     categories: [
       {
         id: "clasicos-entradas",
@@ -409,6 +413,7 @@ export const menuData: MenuSection[] = [
     id: "postres",
     name: "Postres",
     icon: "🍰",
+    image: "https://cucinago.ar/image/cloud/52006.jpg",
     categories: [
       {
         id: "de-la-casa",
@@ -518,6 +523,7 @@ export const menuData: MenuSection[] = [
     id: "menu-infantil",
     name: "Menú Infantil",
     icon: "👶",
+    image: "https://cucinago.ar/image/cloud/54093.jpg",
     categories: [
       {
         id: "kids-menu",
@@ -567,6 +573,7 @@ export const menuData: MenuSection[] = [
     id: "bebidas",
     name: "Bebidas",
     icon: "🥤",
+    image: "https://cucinago.ar/image/cloud/51999.jpg",
     categories: [
       {
         id: "gaseosas",

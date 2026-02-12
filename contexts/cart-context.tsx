@@ -195,7 +195,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return "Hola! Me gustaría hacer un pedido."
     }
 
-    let message = "*PEDIDO - Pizzería Popular*\n\n"
+    let message = "*WEB-ORDER \nPEDIDO - Pizzería Popular*\n\n"
     
     state.items.forEach((cartItem, index) => {
       const itemName = cartItem.item.name
@@ -229,8 +229,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
     
     message += "Gracias por elegir Pizzería Popular!\n"
-    message += "Channel=WEB"
-
     return message
   }
 
